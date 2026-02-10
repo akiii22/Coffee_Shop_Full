@@ -1,21 +1,34 @@
 import express from "express";
+import cors from "cors";
 
 import productsRoutes from "./routes/productsRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import dashBoardRoutes from "./routes/dashBoardRoutes.js";
 import salesRoutes from "./routes/salesRoutes.js";
-import cors from "cors";
+
 const app = express();
+
+const allowedOrigins = [
+  "https://coffee-shop-admin-phi.vercel.app",
+  "http://localhost:5174",
+];
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5174",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   }),
 );
 
 app.use(express.json());
+
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productsRoutes);
 app.use("/api/orders", orderRoutes);

@@ -9,9 +9,20 @@ import orderRoutes from "./routes/orderRoutes.js";
 
 const app = express();
 
+const allowedOrigins = [
+  "https://coffee-shop-six-khaki.vercel.app",
+  "http://localhost:5173",
+];
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   }),
 );
