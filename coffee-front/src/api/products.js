@@ -1,25 +1,9 @@
-import axios from "axios";
+import axiosClient from "./axiosClient";
 
-const API = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
-});
-
-API.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("authToken");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  },
-);
-
+// Fetch all products
 export const fetchProducts = async () => {
   try {
-    const res = await API.get("/");
+    const res = await axiosClient.get("/"); // make sure endpoint matches your backend
     return res.data;
   } catch (error) {
     throw error.response?.data || error.message;
