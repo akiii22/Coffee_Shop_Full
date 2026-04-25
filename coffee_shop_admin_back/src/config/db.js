@@ -16,6 +16,10 @@ const db = new Pool({
 
 });
 
+db.on("error", (err) => {
+  console.error("🔥 DB ERROR:", err);
+});
+
 db.connect()
   .then(() => console.log("Connected to PostgreSQL"))
   .catch((err) => console.error("DB Connection Error:", err.message));
