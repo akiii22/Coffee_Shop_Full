@@ -35,6 +35,23 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/dashboard", dashBoardRoutes);
 app.use("/api/sales", salesRoutes);
 
+app.get("/test-db", async (req, res) => {
+  try {
+    console.log("Testing DB connection...");
+
+    const result = await db.query("SELECT NOW()");
+
+    console.log("DB success:", result.rows[0]);
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error("🔥 DB ERROR:", err);
+    res.status(500).json({
+      error: err.message,
+      full: err,
+    });
+  }
+});
 app.get("/", (req, res) => {
   res.send("☕ Coffee Admin Backend is running...");
 });
